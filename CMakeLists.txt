@@ -303,6 +303,7 @@ set(pulseview_SOURCES
 	pv/widgets/sweeptimingwidget.cpp
 	pv/widgets/timestampspinbox.cpp
 	pv/widgets/wellarray.cpp
+	pv/subwindows/measurements/measurementssubwindow.cpp
 )
 
 # This list includes only QObject derived class headers.
@@ -362,6 +363,7 @@ set(pulseview_HEADERS
 	pv/widgets/sweeptimingwidget.hpp
 	pv/widgets/timestampspinbox.hpp
 	pv/widgets/wellarray.hpp
+	pv/subwindows/measurements/measurementssubwindow.hpp
 )
 
 set(pulseview_RESOURCES
@@ -383,7 +385,7 @@ if(ENABLE_DECODE)
 		pv/data/decode/rowdata.cpp
 		pv/subwindows/decoder_selector/item.cpp
 		pv/subwindows/decoder_selector/model.cpp
-		pv/subwindows/decoder_selector/subwindow.cpp
+		pv/subwindows/decoder_selector/decodersubwindow.cpp
 		pv/views/trace/decodetrace.cpp
 		pv/widgets/decodergroupbox.cpp
 		pv/widgets/decodermenu.cpp
@@ -391,7 +393,7 @@ if(ENABLE_DECODE)
 
 	list(APPEND pulseview_HEADERS
 		pv/data/decodesignal.hpp
-		pv/subwindows/decoder_selector/subwindow.hpp
+		pv/subwindows/decoder_selector/decodersubwindow.hpp
 		pv/views/trace/decodetrace.hpp
 		pv/widgets/decodergroupbox.hpp
 		pv/widgets/decodermenu.hpp

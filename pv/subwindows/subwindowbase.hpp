@@ -44,6 +44,7 @@ namespace subwindows {
 
 enum SubWindowType {
 	SubWindowTypeDecoderSelector,
+	SubWindowTypeMeasurements,
 };
 
 class SubWindowBase : public QWidget

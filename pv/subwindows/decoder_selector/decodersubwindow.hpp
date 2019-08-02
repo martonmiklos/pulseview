@@ -102,12 +102,12 @@ Q_SIGNALS:
 	void currentChanged(const QModelIndex& current);
 };
 
-class SubWindow : public SubWindowBase
+class DecoderSubWindow : public SubWindowBase
 {
 	Q_OBJECT
 
 public:
-	explicit SubWindow(Session &session, QWidget *parent = nullptr);
+	explicit DecoderSubWindow(Session &session, QWidget *parent = nullptr);
 
 	bool has_toolbar() const;
 	QToolBar* create_toolbar(QWidget *parent) const;

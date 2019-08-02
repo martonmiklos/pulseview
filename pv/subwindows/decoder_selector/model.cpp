@@ -19,7 +19,7 @@
 
 #include <QString>
 
-#include "subwindow.hpp"
+#include "decodersubwindow.hpp"
 
 #include <libsigrokdecode/libsigrokdecode.h>
 

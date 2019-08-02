@@ -17,7 +17,7 @@
  * along with this program; if not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "subwindow.hpp"
+#include "decodersubwindow.hpp"
 
 using std::out_of_range;
 

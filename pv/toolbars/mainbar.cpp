@@ -106,7 +106,8 @@ MainBar::MainBar(Session &session, QWidget *parent, pv::views::trace::View *view
 	sample_rate_("Hz", this),
 	updating_sample_rate_(false),
 	updating_sample_count_(false),
-	sample_count_supported_(false)
+	sample_count_supported_(false),
+	show_measurements_button_(new QToolButton())
 #ifdef ENABLE_DECODE
 	, add_decoder_button_(new QToolButton())
 #endif
@@ -215,6 +216,11 @@ MainBar::MainBar(Session &session, QWidget *parent, pv::views::trace::View *view
 	connect(add_decoder_button_, SIGNAL(clicked()),
 		this, SLOT(on_add_decoder_clicked()));
 #endif
+
+	show_measurements_button_->setPopupMode(QToolButton::InstantPopup);
+	show_measurements_button_->setToolTip(tr("Show measurements"));
+	connect(show_measurements_button_, &QToolButton::clicked,
+			this, &MainBar::on_show_measurements_clicked);
 
 	connect(&sample_count_, SIGNAL(value_changed()),
 		this, SLOT(on_sample_count_changed()));
@@ -842,6 +848,11 @@ void MainBar::on_add_decoder_clicked()
 	show_decoder_selector(&session_);
 }
 
+void MainBar::on_show_measurements_clicked()
+{
+	show_measurements(&session_);
+}
+
 void MainBar::add_toolbar_widgets()
 {
 	addAction(action_new_view_);
@@ -861,6 +872,7 @@ void MainBar::add_toolbar_widgets()
 	addSeparator();
 	addWidget(add_decoder_button_);
 #endif
+	addWidget(show_measurements_button_);
 }
 
 bool MainBar::eventFilter(QObject *watched, QEvent *event)

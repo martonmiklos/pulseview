@@ -44,13 +44,14 @@
 #include "devices/hardwaredevice.hpp"
 #include "dialogs/settings.hpp"
 #include "globalsettings.hpp"
+#include "subwindows/measurements/measurementssubwindow.hpp"
 #include "toolbars/mainbar.hpp"
 #include "util.hpp"
 #include "views/trace/view.hpp"
 #include "views/trace/standardbar.hpp"
 
 #ifdef ENABLE_DECODE
-#include "subwindows/decoder_selector/subwindow.hpp"
+#include "subwindows/decoder_selector/decodersubwindow.hpp"
 #endif
 
 #include <libsigrokcxx/libsigrokcxx.hpp>
@@ -205,6 +206,8 @@ shared_ptr<views::ViewBase> MainWindow::add_view(const QString &title,
 				this, SLOT(on_new_view(Session*)));
 			connect(main_bar.get(), SIGNAL(show_decoder_selector(Session*)),
 				this, SLOT(on_show_decoder_selector(Session*)));
+			connect(main_bar.get(), SIGNAL(show_measurements(Session*)),
+				this, SLOT(on_show_measurements(Session*)));
 
 			main_bar->action_view_show_cursors()->setChecked(tv->cursors_shown());
 
@@ -275,6 +278,9 @@ shared_ptr<subwindows::SubWindowBase> MainWindow::add_subwindow(
 			title = tr("Decoder Selector");
 			break;
 #endif
+		case subwindows::SubWindowTypeMeasurements:
+			title = tr("Measurements");
+			break;
 		default:
 			break;
 	}
@@ -289,8 +295,10 @@ shared_ptr<subwindows::SubWindowBase> MainWindow::add_subwindow(
 
 #ifdef ENABLE_DECODE
 	if (type == subwindows::SubWindowTypeDecoderSelector)
-		v = make_shared<subwindows::decoder_selector::SubWindow>(session, dock_main);
+		v = make_shared<subwindows::decoder_selector::DecoderSubWindow>(session, dock_main);
 #endif
+	if (type == subwindows::SubWindowTypeMeasurements)
+		v = make_shared<subwindows::measurements::MeasurementsSubWindow>(session, dock_main);
 
 	if (!v)
 		return nullptr;
@@ -870,7 +878,7 @@ void MainWindow::on_show_decoder_selector(Session *session)
 	// Close dock widget if it's already showing and return
 	for (auto entry : sub_windows_) {
 		QDockWidget* dock = entry.first;
-		if (dynamic_pointer_cast<subwindows::decoder_selector::SubWindow>(entry.second)) {
+		if (dynamic_pointer_cast<subwindows::decoder_selector::DecoderSubWindow>(entry.second)) {
 			sub_windows_.erase(dock);
 			dock->close();
 			return;
@@ -882,6 +890,24 @@ void MainWindow::on_show_decoder_selector(Session *session)
 		if (s.get() == session)
 			add_subwindow(subwindows::SubWindowTypeDecoderSelector, *s);
 #endif
+}
+
+void MainWindow::on_show_measurements(Session *session)
+{
+	// Close dock widget if it's already showing and return
+	for (auto entry : sub_windows_) {
+		QDockWidget* dock = entry.first;
+		if (dynamic_pointer_cast<subwindows::decoder_selector::DecoderSubWindow>(entry.second)) {
+			sub_windows_.erase(dock);
+			dock->close();
+			return;
+		}
+	}
+
+	// We get a pointer and need a reference
+	for (shared_ptr<Session> s : sessions_)
+		if (s.get() == session)
+			add_subwindow(subwindows::SubWindowTypeMeasurements, *s);
 }
 
 void MainWindow::on_sub_window_close_clicked()

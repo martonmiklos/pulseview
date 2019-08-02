@@ -151,6 +151,7 @@ private Q_SLOTS:
 	void on_actionConnect_triggered();
 
 	void on_add_decoder_clicked();
+	void on_show_measurements_clicked();
 
 protected:
 	void add_toolbar_widgets();
@@ -160,6 +161,7 @@ protected:
 Q_SIGNALS:
 	void new_view(Session *session);
 	void show_decoder_selector(Session *session);
+	void show_measurements(Session *session);
 
 private:
 	QToolButton *open_button_, *save_button_;
@@ -179,6 +181,7 @@ private:
 
 	bool sample_count_supported_;
 
+	QToolButton *show_measurements_button_;
 #ifdef ENABLE_DECODE
 	QToolButton *add_decoder_button_;
 #endif

@@ -30,7 +30,7 @@
 #include <QVBoxLayout>
 
 #include "pv/session.hpp"
-#include "pv/subwindows/decoder_selector/subwindow.hpp"
+#include "pv/subwindows/decoder_selector/decodersubwindow.hpp"
 
 using std::reverse;
 using std::shared_ptr;
@@ -69,7 +69,7 @@ void QCustomTreeView::currentChanged(const QModelIndex& current,
 }
 
 
-SubWindow::SubWindow(Session& session, QWidget* parent) :
+DecoderSubWindow::DecoderSubWindow(Session& session, QWidget* parent) :
 	SubWindowBase(session, parent),
 	splitter_(new QSplitter()),
 	tree_view_(new QCustomTreeView()),
@@ -154,19 +154,19 @@ SubWindow::SubWindow(Session& session, QWidget* parent) :
 	filter->setFocus();
 }
 
-bool SubWindow::has_toolbar() const
+bool DecoderSubWindow::has_toolbar() const
 {
 	return true;
 }
 
-QToolBar* SubWindow::create_toolbar(QWidget *parent) const
+QToolBar* DecoderSubWindow::create_toolbar(QWidget *parent) const
 {
 	QToolBar* toolbar = new QToolBar(parent);
 
 	return toolbar;
 }
 
-int SubWindow::minimum_width() const
+int DecoderSubWindow::minimum_width() const
 {
 	QFontMetrics m(info_label_body_->font());
 	const int label_width = m.width(initial_notice);
@@ -174,7 +174,7 @@ int SubWindow::minimum_width() const
 	return label_width + min_width_margin;
 }
 
-vector<const char*> SubWindow::get_decoder_inputs(const srd_decoder* d) const
+vector<const char*> DecoderSubWindow::get_decoder_inputs(const srd_decoder* d) const
 {
 	vector<const char*> ret_val;
 
@@ -184,7 +184,7 @@ vector<const char*> SubWindow::get_decoder_inputs(const srd_decoder* d) const
 	return ret_val;
 }
 
-vector<const srd_decoder*> SubWindow::get_decoders_providing(const char* output) const
+vector<const srd_decoder*> DecoderSubWindow::get_decoders_providing(const char* output) const
 {
 	vector<const srd_decoder*> ret_val;
 
@@ -205,7 +205,7 @@ vector<const srd_decoder*> SubWindow::get_decoders_providing(const char* output)
 	return ret_val;
 }
 
-void SubWindow::on_item_changed(const QModelIndex& index)
+void DecoderSubWindow::on_item_changed(const QModelIndex& index)
 {
 	if (!index.isValid())
 		return;
@@ -237,7 +237,7 @@ void SubWindow::on_item_changed(const QModelIndex& index)
 	info_label_footer_->setText(tr("<p align='right'>Tags: %1</p>").arg(tags));
 }
 
-void SubWindow::on_item_activated(const QModelIndex& index)
+void DecoderSubWindow::on_item_activated(const QModelIndex& index)
 {
 	if (!index.isValid())
 		return;
@@ -305,7 +305,7 @@ void SubWindow::on_item_activated(const QModelIndex& index)
 	new_decoders_selected(decoders);
 }
 
-void SubWindow::on_filter_changed(const QString& text)
+void DecoderSubWindow::on_filter_changed(const QString& text)
 {
 	sort_filter_model_->setFilterFixedString(text);
 
@@ -313,7 +313,7 @@ void SubWindow::on_filter_changed(const QString& text)
 	tree_view_->setExpanded(tree_view_->model()->index(0, 0), !text.isEmpty());
 }
 
-void SubWindow::on_filter_return_pressed()
+void DecoderSubWindow::on_filter_return_pressed()
 {
 	int num_visible_decoders = 0;
 	QModelIndex last_valid_index;
